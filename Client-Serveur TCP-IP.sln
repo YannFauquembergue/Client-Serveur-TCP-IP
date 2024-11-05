@@ -5,6 +5,8 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client TCP-IP", "Client TCP-IP\Client TCP-IP.vcxproj", "{0696DE24-1F35-4E25-9C87-3880A1692C76}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Serveur TCP-IP", "Serveur TCP-IP\Serveur TCP-IP.vcxproj", "{DEEAB1B1-F20B-405C-907C-CF66A7AC6CC9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -15,6 +17,10 @@ Global
 		{0696DE24-1F35-4E25-9C87-3880A1692C76}.Debug|x64.Build.0 = Debug|x64
 		{0696DE24-1F35-4E25-9C87-3880A1692C76}.Release|x64.ActiveCfg = Release|x64
 		{0696DE24-1F35-4E25-9C87-3880A1692C76}.Release|x64.Build.0 = Release|x64
+		{DEEAB1B1-F20B-405C-907C-CF66A7AC6CC9}.Debug|x64.ActiveCfg = Debug|x64
+		{DEEAB1B1-F20B-405C-907C-CF66A7AC6CC9}.Debug|x64.Build.0 = Debug|x64
+		{DEEAB1B1-F20B-405C-907C-CF66A7AC6CC9}.Release|x64.ActiveCfg = Release|x64
+		{DEEAB1B1-F20B-405C-907C-CF66A7AC6CC9}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

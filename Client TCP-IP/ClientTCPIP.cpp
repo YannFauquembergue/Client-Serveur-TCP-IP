@@ -4,6 +4,7 @@ ClientTCPIP::ClientTCPIP(QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
+
     socket = new QTcpSocket(this);
     QObject::connect(socket, SIGNAL(connected()), this, SLOT(OnSocketConnected()));
     QObject::connect(socket, SIGNAL(disconnected()), this, SLOT(OnSocketDisconnected()));
@@ -13,7 +14,6 @@ ClientTCPIP::ClientTCPIP(QWidget *parent)
 
 void ClientTCPIP::OnConnectButtonClicked()
 {
-    ui.connectStatus->setText("Etat connexion : Connexion...");
     QString ip = ui.ipLine->text();
     QString port = ui.portLine->text();
 
@@ -26,7 +26,7 @@ void ClientTCPIP::OnConnectButtonClicked()
     }
     else
     {
-        ui.errorLabel->setText("ERREUR: Echec de la connexion.");
+        ui.errorLabel->setText("ERREUR: Port invalide");
         ui.connectStatus->setText("Etat connexion : Deconnecte");
     }
 }
