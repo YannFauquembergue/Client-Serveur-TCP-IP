@@ -34,6 +34,25 @@ void ServeurTCPIP::OnListenButtonClicked()
 void ServeurTCPIP::OnServerNewConnection()
 {
     ui.logBox->insertPlainText("Nouvelle connexion client !\n");
+    QTcpSocket* client = server->nextPendingConnection();
+    QObject::connect(client, SIGNAL(readyRead()), this, SLOT(OnClientReadyRead()));
+    QObject::connect(client, SIGNAL(disconnected()), this, SLOT(OnClientDisconnected()));
+}
+
+void ServeurTCPIP::OnClientReadyRead()
+{
+    QTcpSocket* obj = qobject_cast<QTcpSocket*>(sender());
+    QByteArray data = obj->read(obj->bytesAvailable());
+    QString str(data);
+    obj->write(data);
+}
+
+void ServeurTCPIP::OnClientDisconnected()
+{
+    QTcpSocket* obj = qobject_cast<QTcpSocket*>(sender());
+    QObject::disconnect(obj, SIGNAL(readyRead()), this, SLOT(OnClientReadyRead));
+    QObject::disconnect(obj, SIGNAL(disconnected()), this, SLOT(OnClientDisconnected));
+    obj->deleteLater();
 }
 
 void ServeurTCPIP::OnLogClearButtonClicked()

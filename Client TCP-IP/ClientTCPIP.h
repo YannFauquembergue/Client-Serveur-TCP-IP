@@ -10,6 +10,7 @@ class ClientTCPIP : public QMainWindow
 
 public:
     ClientTCPIP(QWidget *parent = nullptr);
+    void SendRequest(QString& request);
 
 private:
     Ui::ClientTCPIPClass ui;
@@ -21,4 +22,6 @@ public slots:
     void OnSocketConnected();
     void OnSocketDisconnected();
     void OnSocketReadyRead();
+
+    void OnGetTempButtonClicked();
 };

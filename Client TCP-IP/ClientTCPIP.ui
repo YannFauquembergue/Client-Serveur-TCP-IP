@@ -140,6 +140,9 @@
        <height>21</height>
       </rect>
      </property>
+     <property name="text">
+      <string>01</string>
+     </property>
     </widget>
    </widget>
    <widget class="QGroupBox" name="connectGroup">
@@ -306,6 +309,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>getButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ClientTCPIPClass</receiver>
+   <slot>OnGetTempButtonClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>440</x>
+     <y>152</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>connected()</signal>
@@ -314,5 +333,6 @@
   <slot>OnConnectButtonClicked()</slot>
   <slot>OnSocketConnected()</slot>
   <slot>OnSocketDisconnected()</slot>
+  <slot>OnGetTempButtonClicked()</slot>
  </slots>
 </ui>

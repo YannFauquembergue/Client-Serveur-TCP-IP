@@ -2,6 +2,7 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_ServeurTCPIP.h"
+#include <qtcpsocket.h>
 #include <qtcpserver.h>
 
 class ServeurTCPIP : public QMainWindow
@@ -17,7 +18,10 @@ private:
 
 public slots:
     void OnListenButtonClicked();
+
     void OnServerNewConnection();
+    void OnClientReadyRead();
+    void OnClientDisconnected();
 
     void OnLogClearButtonClicked();
 };

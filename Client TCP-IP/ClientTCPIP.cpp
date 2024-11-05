@@ -12,6 +12,15 @@ ClientTCPIP::ClientTCPIP(QWidget *parent)
 
 }
 
+void ClientTCPIP::SendRequest(QString &request)
+{
+    if (socket->state() == QAbstractSocket::ConnectedState) {
+        QTextStream stream(socket);
+        stream << request;
+        socket->flush();
+    }
+}
+
 void ClientTCPIP::OnConnectButtonClicked()
 {
     QString ip = ui.ipLine->text();
@@ -44,4 +53,25 @@ void ClientTCPIP::OnSocketDisconnected()
 void ClientTCPIP::OnSocketReadyRead()
 {
     ui.dataBox->insertPlainText("placeholder");
+}
+
+void ClientTCPIP::OnGetTempButtonClicked()
+{
+    if (ui.tempCombo->currentIndex() < 0) { return; }
+
+    switch (ui.tempCombo->currentIndex())
+    {
+    case 0:
+
+        break;
+    case 1:
+
+        break;
+    case 2:
+
+        break;
+
+    default:
+        break;
+    }
 }
