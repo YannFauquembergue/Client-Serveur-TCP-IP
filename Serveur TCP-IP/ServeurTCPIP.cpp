@@ -45,6 +45,8 @@ void ServeurTCPIP::OnClientReadyRead()
     QByteArray data = obj->read(obj->bytesAvailable());
     QString request(data);
 
+    ui.logBox->insertPlainText("Donnees recues: " + request + "\n");
+
     QString response;
 
     // Requête est de type température Celsius ?
@@ -67,7 +69,8 @@ void ServeurTCPIP::OnClientReadyRead()
         response = "ERREUR: Requête inconnue";
     }
 
-    obj->write(response.toUtf8());
+    obj->write(response.toStdString().c_str());
+    ui.logBox->insertPlainText("Donnees envoyees: " + response + "\n");
 }
 
 void ServeurTCPIP::OnClientDisconnected()

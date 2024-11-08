@@ -53,12 +53,36 @@ void ClientTCPIP::OnSocketDisconnected()
 void ClientTCPIP::OnSocketReadyRead()
 {
     QByteArray data = socket->readAll();
-    QString str(data);
+    QString response(data);
 
-    // Affiche la réponse dans dataBox
-    ui.dataBox->insertPlainText(str + "\n");
-    ui.dataBox->ensureCursorVisible();
+    QString formattedResponse;
+
+    // Réponse de type température Celsius
+    if (response.startsWith("Td")) {
+        QString sensorId = response.mid(2, 2);
+        QString temperature = response.mid(5);
+        formattedResponse = QString("La temperature en Celsius du capteur %1 est de %2.C").arg(sensorId, temperature);
+    }
+    // Réponse de type température Fahrenheit
+    else if (response.startsWith("Tf")) {
+        QString sensorId = response.mid(2, 2);
+        QString temperature = response.mid(5);
+        formattedResponse = QString("La temperature en Fahrenheit du capteur %1 est de %2.F").arg(sensorId, temperature);
+    }
+    // Réponse de type hygrométrie
+    else if (response.startsWith("Hr")) {
+        QString sensorId = response.mid(2, 2);
+        QString humidity = response.mid(5);
+        formattedResponse = QString("L'hygrometrie du capteur %1 est de %2%").arg(sensorId, humidity);
+    }
+    // Réponse inconnue
+    else {
+        formattedResponse = "Réponse inconnue reçue du serveur: " + response;
+    }
+
+    ui.dataBox->insertPlainText(formattedResponse + "\n");
 }
+
 
 void ClientTCPIP::OnGetTempButtonClicked()
 {
