@@ -4,7 +4,7 @@
 #include "ui_ServeurTCPIP.h"
 #include <qtcpsocket.h>
 #include <qtcpserver.h>
-#include <QtGlobal>
+#include <random>
 
 class ServeurTCPIP : public QMainWindow
 {
@@ -26,6 +26,8 @@ public slots:
 
     void OnLogClearButtonClicked();
 
-    QString RespondWithTemperature(const QString& requestType, const QString& sensorId);
-    QString RespondWithHumidity(const QString& sensorId);
+    QString RespondWithTemperature(const QString& requestType, QString& sensorId);
+    QString RespondWithHumidity(QString& sensorId);
+
+    double GenerateRandom(double min, double max);
 };

@@ -101,7 +101,7 @@ void ClientTCPIP::OnGetTempButtonClicked()
             SendRequest(data);
             break;
         case 2:
-            data += "H" + sensorId + "?";
+            data += "Hr" + sensorId + "?";
             SendRequest(data);
             break;
 

@@ -60,8 +60,8 @@ void ServeurTCPIP::OnClientReadyRead()
         response = RespondWithTemperature("Tf", sensorId);
     }
     // Requête est de hygrométrie ?
-    else if (request.startsWith("H") && request.endsWith("?")) {
-        QString sensorId = request.mid(1, request.length() - 2);
+    else if (request.startsWith("Hr") && request.endsWith("?")) {
+        QString sensorId = request.mid(2, request.length() - 3);
         response = RespondWithHumidity(sensorId);
     }
     // Requête inconnue si aucun des trois types ci-dessus est reconnu
@@ -87,23 +87,30 @@ void ServeurTCPIP::OnLogClearButtonClicked()
 }
 
 // Réponse température (Celsius / Fahrenheit)
-QString ServeurTCPIP::RespondWithTemperature(const QString& requestType, const QString& sensorId)
+QString ServeurTCPIP::RespondWithTemperature(const QString& requestType, QString& sensorId)
 {
-    double temperature = (qrand() % 5700 - 2000) / 100.0;
+    double temperature = GenerateRandom(-20, 37);
     char sign = temperature >= 0 ? '+' : '-';
     QString tempType = requestType == "Td" ? "Td" : "Tf";
 
     if (requestType == "Tf") {
-        temperature = temperature * 9.0 / 5.0 + 32.0;
+        temperature = temperature * 9/5 + 32;
     }
 
     return QString("%1%2,%3%4").arg(tempType).arg(sensorId, 2, '0').arg(sign).arg(qAbs(temperature), 0, 'f', 2);
 }
 
 // Réponse hygrométrie
-QString ServeurTCPIP::RespondWithHumidity(const QString& sensorId)
+QString ServeurTCPIP::RespondWithHumidity(QString& sensorId)
 {
-    double humidity = (qrand() % 1000) / 10.0;
+    double humidity = GenerateRandom(0, 99.9);
     return QString("Hr%1,%2").arg(sensorId, 2, '0').arg(humidity, 0, 'f', 1);
+}
+
+double ServeurTCPIP::GenerateRandom(double min, double max) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(min, max);
+    return dis(gen);
 }
 
