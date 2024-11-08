@@ -4,6 +4,7 @@
 #include "ui_ServeurTCPIP.h"
 #include <qtcpsocket.h>
 #include <qtcpserver.h>
+#include <QtGlobal>
 
 class ServeurTCPIP : public QMainWindow
 {
@@ -24,4 +25,7 @@ public slots:
     void OnClientDisconnected();
 
     void OnLogClearButtonClicked();
+
+    QString RespondWithTemperature(const QString& requestType, const QString& sensorId);
+    QString RespondWithHumidity(const QString& sensorId);
 };

@@ -43,8 +43,31 @@ void ServeurTCPIP::OnClientReadyRead()
 {
     QTcpSocket* obj = qobject_cast<QTcpSocket*>(sender());
     QByteArray data = obj->read(obj->bytesAvailable());
-    QString str(data);
-    obj->write(data);
+    QString request(data);
+
+    QString response;
+
+    // Requête est de type température Celsius ?
+    if (request.startsWith("Td") && request.endsWith("?")) {
+        QString sensorId = request.mid(2, request.length() - 3);
+        response = RespondWithTemperature("Td", sensorId);
+    }
+    // Requête est de type température Fahrenheit ?
+    else if (request.startsWith("Tf") && request.endsWith("?")) {
+        QString sensorId = request.mid(2, request.length() - 3);
+        response = RespondWithTemperature("Tf", sensorId);
+    }
+    // Requête est de hygrométrie ?
+    else if (request.startsWith("H") && request.endsWith("?")) {
+        QString sensorId = request.mid(1, request.length() - 2);
+        response = RespondWithHumidity(sensorId);
+    }
+    // Requête inconnue si aucun des trois types ci-dessus est reconnu
+    else {
+        response = "ERREUR: Requête inconnue";
+    }
+
+    obj->write(response.toUtf8());
 }
 
 void ServeurTCPIP::OnClientDisconnected()
@@ -59,3 +82,25 @@ void ServeurTCPIP::OnLogClearButtonClicked()
 {
     ui.logBox->clear();
 }
+
+// Réponse température (Celsius / Fahrenheit)
+QString ServeurTCPIP::RespondWithTemperature(const QString& requestType, const QString& sensorId)
+{
+    double temperature = (qrand() % 5700 - 2000) / 100.0;
+    char sign = temperature >= 0 ? '+' : '-';
+    QString tempType = requestType == "Td" ? "Td" : "Tf";
+
+    if (requestType == "Tf") {
+        temperature = temperature * 9.0 / 5.0 + 32.0;
+    }
+
+    return QString("%1%2,%3%4").arg(tempType).arg(sensorId, 2, '0').arg(sign).arg(qAbs(temperature), 0, 'f', 2);
+}
+
+// Réponse hygrométrie
+QString ServeurTCPIP::RespondWithHumidity(const QString& sensorId)
+{
+    double humidity = (qrand() % 1000) / 10.0;
+    return QString("Hr%1,%2").arg(sensorId, 2, '0').arg(humidity, 0, 'f', 1);
+}
+

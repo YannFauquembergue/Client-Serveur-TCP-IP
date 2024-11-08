@@ -52,26 +52,36 @@ void ClientTCPIP::OnSocketDisconnected()
 
 void ClientTCPIP::OnSocketReadyRead()
 {
-    ui.dataBox->insertPlainText("placeholder");
+    QByteArray data = socket->readAll();
+    QString str(data);
+
+    // Affiche la réponse dans dataBox
+    ui.dataBox->insertPlainText(str + "\n");
+    ui.dataBox->ensureCursorVisible();
 }
 
 void ClientTCPIP::OnGetTempButtonClicked()
 {
     if (ui.tempCombo->currentIndex() < 0) { return; }
 
+    QString data;
+    QString sensorId = ui.sensorLine->text().toStdString().c_str();
     switch (ui.tempCombo->currentIndex())
     {
-    case 0:
+        case 0:
+            data += "Td" + sensorId + "?";
+            SendRequest(data);
+            break;
+        case 1:
+            data += "Tf" + sensorId + "?";
+            SendRequest(data);
+            break;
+        case 2:
+            data += "H" + sensorId + "?";
+            SendRequest(data);
+            break;
 
-        break;
-    case 1:
-
-        break;
-    case 2:
-
-        break;
-
-    default:
-        break;
+        default:
+            break;
     }
 }
