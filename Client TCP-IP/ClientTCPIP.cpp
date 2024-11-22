@@ -80,7 +80,8 @@ void ClientTCPIP::OnSocketReadyRead()
         formattedResponse = "Réponse inconnue reçue du serveur: " + response;
     }
 
-    ui.dataBox->insertPlainText(formattedResponse + "\n");
+    ui.dataBox->addItem(formattedResponse);
+    ui.dataBox->scrollToBottom();
 }
 
 

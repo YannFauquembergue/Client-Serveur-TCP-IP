@@ -33,7 +33,8 @@ void ServeurTCPIP::OnListenButtonClicked()
 
 void ServeurTCPIP::OnServerNewConnection()
 {
-    ui.logBox->insertPlainText("Nouvelle connexion client !\n");
+    ui.logBox->addItem("Nouvelle connexion client !");
+    ui.logBox->scrollToBottom();
     QTcpSocket* client = server->nextPendingConnection();
     QObject::connect(client, SIGNAL(readyRead()), this, SLOT(OnClientReadyRead()));
     QObject::connect(client, SIGNAL(disconnected()), this, SLOT(OnClientDisconnected()));
@@ -45,7 +46,8 @@ void ServeurTCPIP::OnClientReadyRead()
     QByteArray data = obj->read(obj->bytesAvailable());
     QString request(data);
 
-    ui.logBox->insertPlainText("Donnees recues: " + request + "\n");
+    ui.logBox->addItem("Donnees recues: " + request);
+    ui.logBox->scrollToBottom();
 
     QString response;
 
@@ -70,7 +72,8 @@ void ServeurTCPIP::OnClientReadyRead()
     }
 
     obj->write(response.toStdString().c_str());
-    ui.logBox->insertPlainText("Donnees envoyees: " + response + "\n");
+    ui.logBox->addItem("Donnees envoyees: " + response);
+    ui.logBox->scrollToBottom();
 }
 
 void ServeurTCPIP::OnClientDisconnected()
