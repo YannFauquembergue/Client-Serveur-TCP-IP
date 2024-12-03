@@ -30,4 +30,5 @@ public slots:
     QString RespondWithHumidity(QString& sensorId);
 
     double GenerateRandom(double min, double max);
+    QString getLocalIPv4Address();
 };

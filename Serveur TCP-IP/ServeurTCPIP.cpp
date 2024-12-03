@@ -1,4 +1,5 @@
 #include "ServeurTCPIP.h"
+#include <qnetworkinterface.h>
 
 ServeurTCPIP::ServeurTCPIP(QWidget *parent)
     : QMainWindow(parent)
@@ -18,15 +19,23 @@ void ServeurTCPIP::OnListenButtonClicked()
         int portAsInt = port.toInt(&ok);
         if (ok)
         {
-            server->listen(QHostAddress::AnyIPv4, portAsInt);
-            ui.listenStatus->setText("Etat serveur : En ecoute sur le port " + port);
-            ui.listenButton->setText("Fermer");
+            if (server->listen(QHostAddress::AnyIPv4, portAsInt));
+            {
+                ui.listenStatus->setText("Etat serveur : En ecoute sur le port " + port);
+                ui.ipLabel->setText(QString("IP: %1").arg(getLocalIPv4Address()));
+                ui.listenButton->setText("Fermer");
+            }
+        }
+        else
+        {
+            ui.listenStatus->setText("Etat serveur : HS [ERREUR: Port invalide]");
         }
     }
     else
     {
         server->close();
         ui.listenStatus->setText("Etat serveur : HS");
+        ui.ipLabel->setText("IP: -");
         ui.listenButton->setText("Mettre en ecoute");
     }
 }
@@ -68,7 +77,7 @@ void ServeurTCPIP::OnClientReadyRead()
     }
     // Requête inconnue si aucun des trois types ci-dessus est reconnu
     else {
-        response = "ERREUR: Requête inconnue";
+        response = "ERREUR: Requete inconnue";
     }
 
     obj->write(response.toStdString().c_str());
@@ -115,5 +124,21 @@ double ServeurTCPIP::GenerateRandom(double min, double max) {
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(min, max);
     return dis(gen);
+}
+
+QString ServeurTCPIP::getLocalIPv4Address() {
+    QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
+    for (const QNetworkInterface& interface : interfaces) {
+        if (interface.flags().testFlag(QNetworkInterface::IsUp) &&
+            interface.flags().testFlag(QNetworkInterface::IsRunning) &&
+            !interface.flags().testFlag(QNetworkInterface::IsLoopBack)) {
+            for (const QNetworkAddressEntry& entry : interface.addressEntries()) {
+                if (entry.ip().protocol() == QAbstractSocket::IPv4Protocol) {
+                    return entry.ip().toString();
+                }
+            }
+        }
+    }
+    return "0.0.0.0";
 }
 

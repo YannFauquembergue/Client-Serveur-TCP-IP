@@ -17,9 +17,9 @@
    <widget class="QGroupBox" name="tempGroup">
     <property name="geometry">
      <rect>
-      <x>300</x>
+      <x>220</x>
       <y>10</y>
-      <width>291</width>
+      <width>371</width>
       <height>331</height>
      </rect>
     </property>
@@ -130,7 +130,7 @@
       <rect>
        <x>10</x>
        <y>150</y>
-       <width>271</width>
+       <width>351</width>
        <height>171</height>
       </rect>
      </property>
@@ -141,7 +141,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>281</width>
+      <width>201</width>
       <height>331</height>
      </rect>
     </property>
