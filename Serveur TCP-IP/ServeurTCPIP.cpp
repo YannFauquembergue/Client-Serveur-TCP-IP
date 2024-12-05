@@ -82,7 +82,7 @@ void ServeurTCPIP::OnServerNewConnection()
 }
 
 //---------------------------------------------------------------------------------------------
-//* Fonction `OnServerNewConnection`.
+//* Fonction `OnClientReadyRead`.
 //* Méthode slot appelée lorsque le serveur reçoit des données d'un client.
 //* Paramètres : aucun.
 //* Valeur de retour : aucune.

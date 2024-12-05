@@ -112,19 +112,6 @@
       <string>Données récupérées</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="sensorLine">
-     <property name="geometry">
-      <rect>
-       <x>80</x>
-       <y>30</y>
-       <width>121</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>01</string>
-     </property>
-    </widget>
     <widget class="QListWidget" name="dataBox">
      <property name="geometry">
       <rect>
@@ -132,6 +119,16 @@
        <y>150</y>
        <width>351</width>
        <height>171</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="sensorLine">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>30</y>
+       <width>121</width>
+       <height>22</height>
       </rect>
      </property>
     </widget>
@@ -265,7 +262,7 @@
      <x>0</x>
      <y>0</y>
      <width>600</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

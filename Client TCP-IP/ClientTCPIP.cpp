@@ -127,7 +127,7 @@ void ClientTCPIP::OnSocketReadyRead()
     }
     // Réponse inconnue
     else {
-        formattedResponse = "Réponse inconnue reçue du serveur: " + response;
+        formattedResponse = "Reponse inconnue reçue du serveur: " + response;
     }
 
     ui.dataBox->addItem(formattedResponse);
