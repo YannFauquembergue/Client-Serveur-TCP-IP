@@ -1,7 +1,27 @@
+//*********************************************************************************************
+//* Programme : ServeurTCPIP.cpp                                      Date : 22/11/2024
+//*--------------------------------------------------------------------------------------------
+//* Dernière mise à jour : 05/12/2024
+//*
+//* Programmeurs : Fauquembergue Yann                                    Classe : BTSCIEL2
+//*                Quadrao Gabin
+//*--------------------------------------------------------------------------------------------
+//* But : Interface de gestion de serveur TCP/IP qui traite des données de température
+//*       
+//* 
+//*********************************************************************************************
+
 #include "ServeurTCPIP.h"
 #include <qnetworkinterface.h>
 
-ServeurTCPIP::ServeurTCPIP(QWidget *parent)
+//---------------------------------------------------------------------------------------------
+//* Constructeur de la classe `ServeurTCPIP`.
+//* Initialise les variables et configure l'IHM
+//* Paramètres :
+//*  - QWidget* parent : widget parent (nullptr par défaut pour une fenêtre principale).
+//* Valeur de retour : aucune.
+//---------------------------------------------------------------------------------------------
+ServeurTCPIP::ServeurTCPIP(QWidget* parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
@@ -10,6 +30,12 @@ ServeurTCPIP::ServeurTCPIP(QWidget *parent)
     QObject::connect(server, SIGNAL(newConnection()), this, SLOT(OnServerNewConnection()));
 }
 
+//---------------------------------------------------------------------------------------------
+//* Fonction `OnListenButtonClicked`.
+//* Méthode slot appelée lorsque le bouton d'écoute de port est appuyé.
+//* Paramètres : aucun.
+//* Valeur de retour : aucune.
+//---------------------------------------------------------------------------------------------
 void ServeurTCPIP::OnListenButtonClicked()
 {
     if (!server->isListening()) {
@@ -40,6 +66,12 @@ void ServeurTCPIP::OnListenButtonClicked()
     }
 }
 
+//---------------------------------------------------------------------------------------------
+//* Fonction `OnServerNewConnection`.
+//* Méthode slot appelée lorsque le serveur reçoit une nouvelle connexion
+//* Paramètres : aucun.
+//* Valeur de retour : aucune.
+//---------------------------------------------------------------------------------------------
 void ServeurTCPIP::OnServerNewConnection()
 {
     ui.logBox->addItem("Nouvelle connexion client !");
@@ -49,6 +81,12 @@ void ServeurTCPIP::OnServerNewConnection()
     QObject::connect(client, SIGNAL(disconnected()), this, SLOT(OnClientDisconnected()));
 }
 
+//---------------------------------------------------------------------------------------------
+//* Fonction `OnServerNewConnection`.
+//* Méthode slot appelée lorsque le serveur reçoit des données d'un client.
+//* Paramètres : aucun.
+//* Valeur de retour : aucune.
+//---------------------------------------------------------------------------------------------
 void ServeurTCPIP::OnClientReadyRead()
 {
     QTcpSocket* obj = qobject_cast<QTcpSocket*>(sender());
@@ -85,6 +123,12 @@ void ServeurTCPIP::OnClientReadyRead()
     ui.logBox->scrollToBottom();
 }
 
+//---------------------------------------------------------------------------------------------
+//* Fonction `OnClientDisconnected`.
+//* Méthode slot appelée lorsqu'un client se déconnecte du serveur.
+//* Paramètres : aucun.
+//* Valeur de retour : aucune.
+//---------------------------------------------------------------------------------------------
 void ServeurTCPIP::OnClientDisconnected()
 {
     QTcpSocket* obj = qobject_cast<QTcpSocket*>(sender());
@@ -93,16 +137,29 @@ void ServeurTCPIP::OnClientDisconnected()
     obj->deleteLater();
 }
 
+//---------------------------------------------------------------------------------------------
+//* Fonction `OnLogClearButtonClicked`.
+//* Méthode slot appelée lorsque le bouton pour effacer le log est appuyé.
+//* Paramètres : aucun.
+//* Valeur de retour : aucune.
+//---------------------------------------------------------------------------------------------
 void ServeurTCPIP::OnLogClearButtonClicked()
 {
     ui.logBox->clear();
 }
 
-// Réponse température (Celsius / Fahrenheit)
+//---------------------------------------------------------------------------------------------
+//* Fonction `RespondWithTemperature`.
+//* Génère une réponse de type température en Celsius ou Fahrenheit.
+//* Paramètres :
+//      - const QString& requestType : Le type de température (°C ou °F ?)
+//      - QString& sensorId : L'id du capteur
+//* Valeur de retour : Message de type "[Type][Capteur],[Température]"
+//---------------------------------------------------------------------------------------------
 QString ServeurTCPIP::RespondWithTemperature(const QString& requestType, QString& sensorId)
 {
     double temperature = GenerateRandom(-20, 37);
-    char sign = temperature >= 0 ? '+' : '-';
+    char sign = temperature >= 0 ? '+' : '-'; // On cherche à rendre visible le "+" si la valeur est positive
     QString tempType = requestType == "Td" ? "Td" : "Tf";
 
     if (requestType == "Tf") {
@@ -112,7 +169,13 @@ QString ServeurTCPIP::RespondWithTemperature(const QString& requestType, QString
     return QString("%1%2,%3%4").arg(tempType).arg(sensorId, 2, '0').arg(sign).arg(qAbs(temperature), 0, 'f', 2);
 }
 
-// Réponse hygrométrie
+//---------------------------------------------------------------------------------------------
+//* Fonction `RespondWithHumidity`.
+//* Génère une réponse de type hygrométrie.
+//* Paramètres :
+//      - QString& sensorId : L'id du capteur
+//* Valeur de retour : Message de type "Hr[Capteur],[Hygrométrie]"
+//---------------------------------------------------------------------------------------------
 QString ServeurTCPIP::RespondWithHumidity(QString& sensorId)
 {
     double humidity = GenerateRandom(0, 99.9);
@@ -126,6 +189,12 @@ double ServeurTCPIP::GenerateRandom(double min, double max) {
     return dis(gen);
 }
 
+//---------------------------------------------------------------------------------------------
+//* Fonction `getLocalIPv4Address`.
+//* Obtient la première adresse IPv4 locale disponible.
+//* Paramètres : aucun.
+//* Valeur de retour : Adresse IPv4 locale si possible, sinon 0.0.0.0
+//---------------------------------------------------------------------------------------------
 QString ServeurTCPIP::getLocalIPv4Address() {
     QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
     for (const QNetworkInterface& interface : interfaces) {

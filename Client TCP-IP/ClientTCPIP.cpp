@@ -1,5 +1,25 @@
+//*********************************************************************************************
+//* Programme : ClientTCPIP.cpp                                      Date : 22/11/2024
+//*--------------------------------------------------------------------------------------------
+//* Dernière mise à jour : 05/12/2024
+//*
+//* Programmeurs : Fauquembergue Yann                                    Classe : BTSCIEL2
+//*                Quadrao Gabin
+//*--------------------------------------------------------------------------------------------
+//* But : Interface de gestion de client TCP/IP qui envoie des requêtes de température et
+//*       reçoit, si possible, les valeurs demandées
+//* 
+//*********************************************************************************************
+
 #include "ClientTCPIP.h"
 
+//---------------------------------------------------------------------------------------------
+//* Constructeur de la classe `ClientTCPIP`.
+//* Initialise les variables et configure l'IHM
+//* Paramètres :
+//*  - QWidget* parent : widget parent (nullptr par défaut pour une fenêtre principale).
+//* Valeur de retour : aucune.
+//---------------------------------------------------------------------------------------------
 ClientTCPIP::ClientTCPIP(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -12,6 +32,12 @@ ClientTCPIP::ClientTCPIP(QWidget *parent)
 
 }
 
+//---------------------------------------------------------------------------------------------
+//* Fonction `SendRequest`.
+//* Méthode qui envoie une requête au serveur
+//* Paramètres : QString &request : La requête à envoyer.
+//* Valeur de retour : aucune.
+//---------------------------------------------------------------------------------------------
 void ClientTCPIP::SendRequest(QString &request)
 {
     if (socket->state() == QAbstractSocket::ConnectedState) {
@@ -21,6 +47,12 @@ void ClientTCPIP::SendRequest(QString &request)
     }
 }
 
+//---------------------------------------------------------------------------------------------
+//* Fonction `OnConnectButtonClicked`.
+//* Méthode slot appelée lorsque le bouton de connexion est appuyé.
+//* Paramètres : aucun.
+//* Valeur de retour : aucune.
+//---------------------------------------------------------------------------------------------
 void ClientTCPIP::OnConnectButtonClicked()
 {
     QString ip = ui.ipLine->text();
@@ -40,16 +72,34 @@ void ClientTCPIP::OnConnectButtonClicked()
     }
 }
 
+//---------------------------------------------------------------------------------------------
+//* Fonction `OnSocketConnected`.
+//* Méthode slot appelée lorsque le socket est connecté
+//* Paramètres : aucun.
+//* Valeur de retour : aucune.
+//---------------------------------------------------------------------------------------------
 void ClientTCPIP::OnSocketConnected()
 {
     ui.connectStatus->setText("Etat connexion : Connecte");
 }
 
+//---------------------------------------------------------------------------------------------
+//* Fonction `OnSocketDisconnected`.
+//* Méthode slot appelée lorsque le socket est déconnecté
+//* Paramètres : aucun.
+//* Valeur de retour : aucune.
+//---------------------------------------------------------------------------------------------
 void ClientTCPIP::OnSocketDisconnected()
 {
     ui.connectStatus->setText("Etat connexion : Deconnecte");
 }
 
+//---------------------------------------------------------------------------------------------
+//* Fonction `OnSocketReadyRead`.
+//* Méthode slot appelée lorsque le socket reçoit des données
+//* Paramètres : aucun.
+//* Valeur de retour : aucune.
+//---------------------------------------------------------------------------------------------
 void ClientTCPIP::OnSocketReadyRead()
 {
     QByteArray data = socket->readAll();
@@ -84,7 +134,13 @@ void ClientTCPIP::OnSocketReadyRead()
     ui.dataBox->scrollToBottom();
 }
 
-
+//---------------------------------------------------------------------------------------------
+//* Fonction `OnGetTempButtonClicked`.
+//* Méthode slot appelée lorsque le bouton de requête de température est appuyé. Elle tire les
+//      informations sur l'IHM et envoie une requête
+//* Paramètres : aucun.
+//* Valeur de retour : aucune.
+//---------------------------------------------------------------------------------------------
 void ClientTCPIP::OnGetTempButtonClicked()
 {
     if (ui.tempCombo->currentIndex() < 0) { return; }
